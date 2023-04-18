@@ -1,0 +1,57 @@
+<form [formGroup]="toDoForm" (ngSubmit)="processTodo()">
+    <table>
+        <tr>
+            <td>Name</td>
+            <td>
+                <input type="text" size="30" formControlName="name">
+                <span *ngIf="hasError('name')">Mandatory</span>
+            </td>
+        </tr>
+        <tr>
+            <td>Due Date</td>
+            <td>
+                <input type="datetime-local" size="30" formControlName="dueDate">
+                <span *ngIf="hasError('dueDate')">Mandatory</span>
+            </td>
+        </tr>taskName
+        <tr>
+            <td>
+                <button type="submit" [disabled]="isFormInvalid()">Save</button>
+            </td>
+            <td>
+                <button type="button" (click)="addTask()">Add Task</button>
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+    <div *ngIf="taskArray.length > 0; else noTasks">
+        <table>
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Priority</th>
+                </tr>
+            </thead>
+            <tbody formArrayName="tasks">
+            <tr *ngFor="let t of taskArray.controls; let i = index" [formGroupName]="i">
+                <td>
+                    <input type="text" size="30" placeholder="task description" formControlName="description">
+                </td>
+                <td>
+                    <select formControlName="priority" value="low">
+                        <option value="low">low</option>
+                        <option value="mid">mid</option>
+                        <option value="high">high</option>
+                    </select>
+                </td>
+                <td (click)="deleteTask(i)">✖️</td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+</form>
+
+<ng-template #noTasks>
+    <h2>No Tasks to display here</h2>
+</ng-template>
